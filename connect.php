@@ -3,7 +3,7 @@
 <head>
 	<title>Code-paste.io</title>
 </head>
-<body style="background:blue;">
+<body style="background:white">
 <?php
 $servername="localhost";
 $username="root";
@@ -13,10 +13,10 @@ $conn=mysqli_connect($servername,$username,$password,$db);
 if(!$conn){
 	echo "Connection failed";
 }
-if(isset($_POST["reg"])){
+if(isset($_POST['reg'])){
 	Register();
 }
-if(isset($_POST["signin"])){
+if(isset($_POST['signin'])){
 	Signin();
 }
 /*else
@@ -30,7 +30,10 @@ function Register(){
 						 VALUES('{$_POST["user"]}','{$_POST["pass"]}')");
 /*$sql="INSERT INTO details(username,password)
 VALUES($x,$y)";*/
-}
+	echo "Id created, logout and return again";
+	header("Location:/Signin.php");
+	exit;
+	}
 function Signin(){
 	$servername="localhost";
 	$username="root";
@@ -49,7 +52,6 @@ function Signin(){
 	}
 	if(!$in) {
 		echo "Incorrect username/password";
-		//require 'Signin.php';
 	}
 }
 
@@ -57,12 +59,13 @@ function Signin(){
 mysqli_close($conn);
 ?>
 <br><br>
-<form method="post" action="new.php">
+<form method="post" action="new.php" enctype="multipart/form-data">
 <textarea name="ta" placeholder="Paste your code here" style="color:red;background: black;border:2px red;font-size: 200%; " rows="20" cols="60">
 </textarea>
-<input type="text" name="user" value="<?php echo $_POST["user"];?> " style="display: none;">
+ <input type="text" name="user" value="<?php echo $_POST["user"];?>" style="display: none;">
 <input type="text" name="pass" value="<?php echo $_POST["pass"];?>" style="display: none;">
-<input type="submit" name="finish" value="Submit code" >
+<br><br><input type="submit" name="finish" value="Submit code" >
+
 </form>
 </body>
 </html>
