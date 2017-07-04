@@ -17,18 +17,27 @@ function code(){
 	$username="root";
 	$password="";
 	$db="delta";
-	//$content=mysqli_real_escape_string(mysqli_connect($servername,$username,$password,$db),$_POST["ta"]);
-	$content=$_POST["ta"];
 	echo "<br>";
 
 	$query=mysqli_query(mysqli_connect($servername,$username,$password,$db),"SELECT* FROM details where username='{$_POST["user"]}' AND password='{$_POST["pass"]}' ") or die(mysqli_error());
-	echo "Hi";
+	$sqll=mysqli_query(mysqli_connect($servername,$username,$password,$db),"SELECT id FROM details where username='{$_POST["user"]}' AND password='{$_POST["pass"]}' ");
+	if (mysqli_num_rows($sqll) > 0) {
+    // output data of each row
+
+			$rrow = mysqli_fetch_assoc($sqll);
+        	echo "id: " . $rrow["id"].  " Save this for future viewing <br>";
+	}
+	else {
+    	echo "0 results";
+	}
 	$row = mysqli_fetch_array($query) or die(mysql_error());
 		if(!empty($row["username"]) AND !empty($row["password"])) {
-			echo "HI";
 			$_SESSION['username'] = $row['password'];
-			$sql=mysqli_query(mysqli_connect($servername,$username,$password,$db),"INSERT INTO details(code) VALUES('".mysqli_real_escape_string(mysqli_connect($servername,$username,$password,$db),$content)."')");
+			$ssql="INSERT INTO details(username,password,code) VALUES('{$_POST["user"]}','{$_POST["pass"]}','{$_POST["ta"]}')";
+			mysqli_query(mysqli_connect($servername,$username,$password,$db),$ssql);
+			echo "Last used id is " . mysqli_insert_id(mysqli_connect($servername,$username,$password,$db));
 			echo "CODE  ADDED SUCCESSFULLY";
-	}
+
+		}
 	}
 ?>
