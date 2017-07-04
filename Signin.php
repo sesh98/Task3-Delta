@@ -4,7 +4,7 @@
 	<title></title>
 </head>
 <body>
-<form method="post" action="connect.php">
+<form method="post" action="connect.php" enctype="multipart/form-data">
 Username<br><input type="text" name="user"><br><br>
 Password<br><input type="password" name="pass"><br><br>
 <input type="submit" name="reg" value="Register"><br><br>
