@@ -18,26 +18,25 @@ function code(){
 	$password="";
 	$db="delta";
 	echo "<br>";
-
+	$y;
 	$query=mysqli_query(mysqli_connect($servername,$username,$password,$db),"SELECT* FROM details where username='{$_POST["user"]}' AND password='{$_POST["pass"]}' ") or die(mysqli_error());
-	$sqll=mysqli_query(mysqli_connect($servername,$username,$password,$db),"SELECT id FROM details where username='{$_POST["user"]}' AND password='{$_POST["pass"]}' ");
-	if (mysqli_num_rows($sqll) > 0) {
-    // output data of each row
-
-			$rrow = mysqli_fetch_assoc($sqll);
-        	echo "id: " . $rrow["id"].  " Save this for future viewing <br>";
-	}
-	else {
-    	echo "0 results";
-	}
+	$result=mysqli_query(mysqli_connect($servername,$username,$password,$db),"SELECT * FROM details where username='{$_POST["user"]}' AND password='{$_POST["pass"]}' ");
+	$numResults=mysqli_num_rows($result);
 	$row = mysqli_fetch_array($query) or die(mysql_error());
 		if(!empty($row["username"]) AND !empty($row["password"])) {
 			$_SESSION['username'] = $row['password'];
-			$ssql="INSERT INTO details(username,password,code) VALUES('{$_POST["user"]}','{$_POST["pass"]}','{$_POST["ta"]}')";
-			mysqli_query(mysqli_connect($servername,$username,$password,$db),$ssql);
-			echo "Last used id is " . mysqli_insert_id(mysqli_connect($servername,$username,$password,$db));
-			echo "CODE  ADDED SUCCESSFULLY";
-
+			$sql="INSERT INTO details(username,password,code) VALUES('{$_POST["user"]}','{$_POST["pass"]}','{$_POST["ta"]}')";
+			mysqli_query(mysqli_connect($servername,$username,$password,$db),$sql);
+  			
+  			
 		}
-	}
+			$rowSQL = mysqli_query(mysqli_connect($servername,$username,$password,$db), "SELECT MAX( id ) AS max FROM details" );
+			$row = mysqli_fetch_array($rowSQL );
+			$x = $row['max'];
+			$hash= (rand(0,1000));
+			echo "The referral code is  2k" . $x."nan".$y."<br>";
+			echo "CODE  ADDED SUCCESSFULLY";
+			    header("Location: displaycode.php?id=$x/2k$hash") ;
+
+	}	
 ?>
