@@ -47,12 +47,14 @@ function Signin(){
 		if(!empty($row["username"]) AND !empty($row["password"])) {
 			$_SESSION['username'] = $row['password'];
 			$in=true;
-			echo "SUCCESSFULLY Logged TO USER PROFILE PAGE...";
+			echo " Logged To user profile page...";
 		}
 	}
 	if(!$in) {
 		echo "Incorrect username/password";
 	}
+	
+
 }
 
 
@@ -63,10 +65,9 @@ mysqli_close($conn);
 <textarea name="ta" placeholder="Paste your code here" style="color:red;background: black;border:2px red;font-size: 200%; " rows="20" cols="60">
 </textarea>
  <input type="text" name="user" value="<?php echo $_POST["user"];?>" style="display: none;">
-<input type="text" name="pass" value="<?php echo $_POST["pass"];?>" style="display: none;">
+ <input type="text" name="pass" value="<?php echo $_POST["pass"];?>" style="display: none;">
 <br><br><input type="submit" name="finish" value="Submit code" >
 
 </form>
 </body>
 </html>
-
