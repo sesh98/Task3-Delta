@@ -9,7 +9,10 @@ if(!$conn){
 	echo "Connection failed";
 }
 if(isset($_POST["ta"])){
-	code();
+		if($_POST["user"]!=NULL)
+			code();
+		else
+			header("Location:/Signin.php");
 }
 
 function code(){
@@ -19,24 +22,26 @@ function code(){
 	$db="delta";
 	echo "<br>";
 	$y;
-	$query=mysqli_query(mysqli_connect($servername,$username,$password,$db),"SELECT* FROM details where username='{$_POST["user"]}' AND password='{$_POST["pass"]}' ") or die(mysqli_error());
-	$result=mysqli_query(mysqli_connect($servername,$username,$password,$db),"SELECT * FROM details where username='{$_POST["user"]}' AND password='{$_POST["pass"]}' ");
-	$numResults=mysqli_num_rows($result);
+	$query=mysqli_query(mysqli_connect($servername,$username,$password,$db),"SELECT * FROM details where username='{$_POST["user"]}' AND password='{$_POST["pass"]}' ") or die(mysqli_error());
+	$numResults=mysqli_num_rows($query);
 	$row = mysqli_fetch_array($query) or die(mysql_error());
 		if(!empty($row["username"]) AND !empty($row["password"])) {
 			$_SESSION['username'] = $row['password'];
-			$sql="INSERT INTO details(username,password,code) VALUES('{$_POST["user"]}','{$_POST["pass"]}','{$_POST["ta"]}')";
+			$result=mysqli_query(mysqli_connect($servername,$username,$password,$db),"SELECT * FROM snippet ");
+			/*while ($rrow=mysqli_fetch_array($query)) {
+				$temp=$rrow['id'];
+			}*/
+			$sql="INSERT INTO snippet(code) VALUES('{$_POST["ta"]}')";
 			mysqli_query(mysqli_connect($servername,$username,$password,$db),$sql);
-  			
-  			
 		}
-			$rowSQL = mysqli_query(mysqli_connect($servername,$username,$password,$db), "SELECT MAX( id ) AS max FROM details" );
-			$row = mysqli_fetch_array($rowSQL );
+			$rowSQL = mysqli_query(mysqli_connect($servername,$username,$password,$db), "SELECT MAX( id ) AS max FROM snippet" );
+			$row = mysqli_fetch_array($rowSQL);
 			$x = $row['max'];
 			$hash= (rand(0,1000));
-			echo "The referral code is  2k" . $x."nan".$y."<br>";
+			echo "Your id is :".$x;
+			echo "The referral code is  2k" . $x."nan".$hash."<br>";
 			echo "CODE  ADDED SUCCESSFULLY";
-			    header("Location: displaycode.php?id=$x/2k$hash") ;
+			    //header("Location: displaycode.php?id=$x/2k$hash") ;
 
 	}	
 ?>
