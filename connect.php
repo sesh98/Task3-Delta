@@ -26,35 +26,43 @@ function Register(){
 	$username="root";
 	$password="";
 	$db="delta";
-	$sql=mysqli_query(mysqli_connect($servername,$username,$password,$db),"INSERT INTO details(username,password)
+	$query=mysqli_query(mysqli_connect($servername,$username,$password,$db),"SELECT * FROM details where username='{$_POST["user"]}' AND password='{$_POST["pass"]}' ") or die(mysqli_error());
+	$check=mysqli_query(mysqli_connect($servername,$username,$password,$db),"SELECT * FROM details where username='{$_POST["user"]}'") or die(mysqli_error());
+	$numResults=mysqli_num_rows($check);
+	if($numResults==0){
+		$sql=mysqli_query(mysqli_connect($servername,$username,$password,$db),"INSERT INTO details(username,password)
 						 VALUES('{$_POST["user"]}','{$_POST["pass"]}')");
+		echo "Id created; logout and return again";
+	}
 /*$sql="INSERT INTO details(username,password)
 VALUES($x,$y)";*/
-	echo "Id created, logout and return again";
-	header("Location:/Signin.php");
-	exit;
+	else{
+		echo "Username already taken";
+		$_POST["user"]=NULL;
 	}
+	//header("Location:/Signin.php");
+}
 function Signin(){
 	$servername="localhost";
 	$username="root";
 	$password="";
 	$db="delta";
-	$in=false;
+
 	session_start();
 	if(!empty($_POST["user"])){
 		$query=mysqli_query(mysqli_connect($servername,$username,$password,$db),"SELECT* FROM details where username='{$_POST["user"]}' AND password='{$_POST["pass"]}' ") or die(mysqli_error());
 		$row = mysqli_fetch_array($query) or die(mysql_error());
-		if(!empty($row["username"]) AND !empty($row["password"])) {
-			$_SESSION['username'] = $row['password'];
-			$in=true;
-			echo " Logged To user profile page...";
+		if(mysqli_num_rows($query)){
+			if(!empty($row["username"]) AND !empty($row["password"])) {
+				$_SESSION['username'] = $row['password'];
+				echo " Logged To user profile page...";
+			}
+		}
+		else
+		{
+			echo "The entered username/password is wrong";	
 		}
 	}
-	if(!$in) {
-		echo "Incorrect username/password";
-	}
-	
-
 }
 
 
@@ -66,8 +74,9 @@ mysqli_close($conn);
 </textarea>
  <input type="text" name="user" value="<?php echo $_POST["user"];?>" style="display: none;">
  <input type="text" name="pass" value="<?php echo $_POST["pass"];?>" style="display: none;">
-<br><br><input type="submit" name="finish" value="Submit code" >
+ <br><br><input type="submit" name="finish" value="Submit code" >
 
 </form>
 </body>
 </html>
+
