@@ -14,43 +14,30 @@ if(!$conn){
 	echo "Connection failed";
 }
 if(isset($_POST['reg'])){
-	Register();
+	Register($conn);
 }
 if(isset($_POST['signin'])){
-	Signin();
+	Signin($conn);
 }
-/*else
-	echo "ESTABLISHED Connection";*/
-function Register(){
-	$servername="localhost";
-	$username="root";
-	$password="";
-	$db="delta";
-	$query=mysqli_query(mysqli_connect($servername,$username,$password,$db),"SELECT * FROM details where username='{$_POST["user"]}' AND password='{$_POST["pass"]}' ") or die(mysqli_error());
-	$check=mysqli_query(mysqli_connect($servername,$username,$password,$db),"SELECT * FROM details where username='{$_POST["user"]}'") or die(mysqli_error());
+function Register($conn){
+	$query=mysqli_query($conn,"SELECT * FROM details where username='{$_POST["user"]}' AND password='{$_POST["pass"]}' ") or die(mysqli_error());
+	$check=mysqli_query($conn,"SELECT * FROM details where username='{$_POST["user"]}'") or die(mysqli_error());
 	$numResults=mysqli_num_rows($check);
 	if($numResults==0){
-		$sql=mysqli_query(mysqli_connect($servername,$username,$password,$db),"INSERT INTO details(username,password)
+		$sql=mysqli_query($conn,"INSERT INTO details(username,password)
 						 VALUES('{$_POST["user"]}','{$_POST["pass"]}')");
 		echo "Id created; logout and return again";
 	}
-/*$sql="INSERT INTO details(username,password)
-VALUES($x,$y)";*/
 	else{
 		echo "Username already taken";
 		$_POST["user"]=NULL;
 	}
 	//header("Location:/Signin.php");
 }
-function Signin(){
-	$servername="localhost";
-	$username="root";
-	$password="";
-	$db="delta";
-
+function Signin($conn){
 	session_start();
 	if(!empty($_POST["user"])){
-		$query=mysqli_query(mysqli_connect($servername,$username,$password,$db),"SELECT* FROM details where username='{$_POST["user"]}' AND password='{$_POST["pass"]}' ") or die(mysqli_error());
+		$query=mysqli_query($conn,"SELECT* FROM details where username='{$_POST["user"]}' AND password='{$_POST["pass"]}' ") or die(mysqli_error());
 		$row = mysqli_fetch_array($query) or die(mysql_error());
 		if(mysqli_num_rows($query)){
 			if(!empty($row["username"]) AND !empty($row["password"])) {
@@ -79,4 +66,5 @@ mysqli_close($conn);
 </form>
 </body>
 </html>
+
 
